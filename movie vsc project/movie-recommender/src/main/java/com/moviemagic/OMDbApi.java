@@ -60,7 +60,7 @@ public class OMDbApi {
     //This function does the browsing of the omdbAPI 
    public static void browseCataloge() {  
         String cont = "y";
-        String key = "4c87bee2";
+        String key = ""; //Api key deleted on github version
         String Title;
         String year;
         while (cont.equals("y")) {
