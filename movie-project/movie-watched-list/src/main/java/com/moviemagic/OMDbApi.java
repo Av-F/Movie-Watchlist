@@ -57,9 +57,10 @@ public class OMDbApi {
     }
 
     // This function does the browsing of the omdbAPI
+    // A quick note about key, I redacted my key, you will have to get your own
     public static void browseCataloge() {
         String cont = "y";
-        String key = "4c87bee2";
+        String key = REDACTED;
         String Title;
         String year;
         while (cont.equals("y")) {
