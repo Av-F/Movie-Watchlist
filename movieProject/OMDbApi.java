@@ -59,7 +59,7 @@ public static String parse(String responseBody) {
     // This function does the browsing of the omdbAPI
     public static void browseCataloge() {
         String cont = "y";
-        String key = "4c87bee2";
+        String key = "GetYourOwn"; //Changed the key on github because you would need to get your own
         String Title;
         String year;
         while (cont.equals("y")) {
