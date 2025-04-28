@@ -17,7 +17,7 @@ public class OMDbApi {
     public static String date;
 
     // Parsing through the movie data of the selected movie.
-    // Since I know how the API handles calls, I can use regex instead of JSON, if it were more fragile, I would use JSON
+    // Since I know how the API handles calls, I can use regex instead of JSON, if it was more fragile, I would use JSON
 public static String parse(String responseBody) {
     try {
         String title = responseBody.split("\"Title\":\"")[1].split("\"")[0];
@@ -57,10 +57,11 @@ public static String parse(String responseBody) {
     // This function does the browsing of the omdbAPI
     public static void browseCataloge() {
         String cont = "y";
-        String key = "Insert_API_Key_Here"; // your API key
+        char continues = 'y';
+        String key = "4c87bee2"; // my API key
         String Title;
         String year;
-        while (cont.equals("y")) {
+        while (continues == 'y') {
             System.out.println("-------------------------");
             System.out.println("What movie do you want to look up?");
             Title = scanner.nextLine();
@@ -97,7 +98,7 @@ public static String parse(String responseBody) {
                     }
                     reader.close();
                 }
-                // Otherwise, we show an error
+                // Otherwise we show an error
                 else {
                     reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                     while ((line = reader.readLine()) != null) {
@@ -107,7 +108,7 @@ public static String parse(String responseBody) {
                 }
                 // This function allows us to parse the data
                 parse(responseContent.toString());
-            } catch (MalformedURLException e) { // Throw exceptions if the url gets messed up or an error with input output
+            } catch (MalformedURLException e) { //throw exceptions if the url gets messed up or an error with input output
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,8 +117,9 @@ public static String parse(String responseBody) {
             }
             System.out.println("-------------------------");
             System.out.println("Do you want to continue? y/n ");
-            cont = scanner.nextLine();
-
+            cont = scanner.nextLine().toLowerCase(); // trims user response to be the first letter of their response in lowercase
+            continues = cont.charAt(0);
+            System.out.println(continues);
         }
         System.out.println("Goodbye!");
         System.out.println("-------------------------");
@@ -125,10 +127,10 @@ public static String parse(String responseBody) {
 
     // displayList() purpose is to display watchList.txt
     public static void displayList() {
-        try { //try to read from the buffered reader
+        try { // Try to read from the buffered reader
             BufferedReader reader = new BufferedReader(new FileReader("watchList.txt"));
             String line;
-            while ((line = reader.readLine()) != null) { //while there is a line in the buffer, print it out
+            while ((line = reader.readLine()) != null) { // While there is a line in the buffer, print it out
                 System.out.println(line);
             }
             System.out.println("-------------------------");
@@ -138,7 +140,7 @@ public static String parse(String responseBody) {
         }
     }
 
-    // Main function ties all of the functions together
+    // Main function ties all of the functions togeather
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scan = new Scanner(System.in);
         // Creation and checking for a watchist.txt
@@ -162,6 +164,7 @@ public static String parse(String responseBody) {
                     + "2) See watched movie list \n"
                     + "3) Quit \n" + "-------------------------");
             decision = scan.nextInt();
+            scan.nextLine();
             if (decision == 1) {
                 browseCataloge();
             } else if (decision == 2) {
@@ -169,6 +172,7 @@ public static String parse(String responseBody) {
             } else if (decision != 1 && decision != 2 && decision != 3) {
                 System.out.println("Wrong input detected, please try again");
                 System.out.println("-------------------------");
+                scan.nextLine();
             }
         } while(decision !=3);
         System.out.println("Goodbye!");
