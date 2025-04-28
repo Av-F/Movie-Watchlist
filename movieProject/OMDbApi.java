@@ -17,6 +17,7 @@ public class OMDbApi {
     public static String date;
 
     // Parsing through the movie data of the selected movie.
+    // Since I know how the API handles calls, I can use regex instead of JSON, if it were more fragile, I would use JSON
 public static String parse(String responseBody) {
     try {
         String title = responseBody.split("\"Title\":\"")[1].split("\"")[0];
@@ -27,7 +28,7 @@ public static String parse(String responseBody) {
                 "Release date: " + release);
         System.out.println(" ");
         watched(title);
-    } catch (Exception e) {
+    } catch (Exception e) { //If it broke, give exception
         System.out.println("Could not parse movie information. Response was:");
         System.out.println(responseBody);
     }
@@ -42,12 +43,12 @@ public static String parse(String responseBody) {
         // If they have, write the title of the movie into watchlist.txt
         if (watch.equals("y")) {
             try (BufferedWriter watchWriter = new BufferedWriter(new FileWriter("watchList.txt", true))) {
-                if (!date.equals("")) {
+                if (!date.equals("")) { // If we have a date, write the title and date, otherwise write the title only
                     watchWriter.write(title + " (" + date + ")\n");
                 } else {
                     watchWriter.write(title + "\n");
                 }
-            } catch (IOException e) {
+            } catch (IOException e) { // throw an error if printing out the movie causes an issue
                 e.printStackTrace();
             }
         }
@@ -56,7 +57,7 @@ public static String parse(String responseBody) {
     // This function does the browsing of the omdbAPI
     public static void browseCataloge() {
         String cont = "y";
-        String key = "GetYourOwn"; //Changed the key on github because you would need to get your own
+        String key = "Insert_API_Key_Here"; // your API key
         String Title;
         String year;
         while (cont.equals("y")) {
@@ -72,7 +73,7 @@ public static String parse(String responseBody) {
             String line;
             StringBuffer responseContent = new StringBuffer();
             try {
-                // Figuring out how I can implement a year function as well
+                // Using Regex, I can see if the user included a year and check to see if the year matches up with the movie
                 if (!year.isEmpty() && year.matches(".*\\d.*")) {
                     URL url = new URL("https://www.omdbapi.com/?t=" + Title + "+&y=" + year + "&apikey=" + key);
                     connection = (HttpURLConnection) url.openConnection();
@@ -89,15 +90,14 @@ public static String parse(String responseBody) {
                 // If we get a status of 200, it means we are connected!
                 if (status == 200) {
 
-                    // If we are connected, we create a buffered reader to collect the selected
-                    // movie data
+                    // If we are connected, we create a buffered reader to collect the selected movie data
                     reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     while ((line = reader.readLine()) != null) {
                         responseContent.append(line);
                     }
                     reader.close();
                 }
-                // Otherwise we show an error
+                // Otherwise, we show an error
                 else {
                     reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                     while ((line = reader.readLine()) != null) {
@@ -107,13 +107,12 @@ public static String parse(String responseBody) {
                 }
                 // This function allows us to parse the data
                 parse(responseContent.toString());
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException e) { // Throw exceptions if the url gets messed up or an error with input output
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } finally {
-                connection.disconnect();
+                connection.disconnect(); //disconnect the connection
             }
             System.out.println("-------------------------");
             System.out.println("Do you want to continue? y/n ");
@@ -126,20 +125,20 @@ public static String parse(String responseBody) {
 
     // displayList() purpose is to display watchList.txt
     public static void displayList() {
-        try {
+        try { //try to read from the buffered reader
             BufferedReader reader = new BufferedReader(new FileReader("watchList.txt"));
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) { //while there is a line in the buffer, print it out
                 System.out.println(line);
             }
             System.out.println("-------------------------");
             reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) { 
+            e.printStackTrace(); //otherwise through an exception
         }
     }
 
-    // Main function ties all of the functions togeather
+    // Main function ties all of the functions together
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scan = new Scanner(System.in);
         // Creation and checking for a watchist.txt
@@ -157,7 +156,7 @@ public static String parse(String responseBody) {
         // This is the menu that the user interacts with
         System.out.println("   Movie search!   ");
         System.out.println("-------------------------");
-        while (decision != 3) {
+        do {
             System.out.println("Menu: \n" +
                     "1) Browse movie catalog \n"
                     + "2) See watched movie list \n"
@@ -171,12 +170,9 @@ public static String parse(String responseBody) {
                 System.out.println("Wrong input detected, please try again");
                 System.out.println("-------------------------");
             }
-        }
+        } while(decision !=3);
         System.out.println("Goodbye!");
         scan.close();
-        watched.close();
-        _cont.close();
-        movieTitle.close();
-        movieYear.close();
+        scanner.close();
     }
 }
