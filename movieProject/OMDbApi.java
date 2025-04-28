@@ -13,10 +13,7 @@ import java.util.Scanner;
 
 public class OMDbApi {
     private static HttpURLConnection connection;
-    public static Scanner watched = new Scanner(System.in);
-    public static Scanner _cont = new Scanner(System.in);
-    public static Scanner movieTitle = new Scanner(System.in);
-    public static Scanner movieYear = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
     public static String date;
 
     // Parsing through the movie data of the selected movie.
@@ -41,7 +38,7 @@ public static String parse(String responseBody) {
     public static void watched(String title) {
         String watch = "n";
         System.out.println("Have you watched this movie before? y/n");
-        watch = watched.nextLine();
+        watch = scanner.nextLine();
         // If they have, write the title of the movie into watchlist.txt
         if (watch.equals("y")) {
             try (BufferedWriter watchWriter = new BufferedWriter(new FileWriter("watchList.txt", true))) {
@@ -65,10 +62,10 @@ public static String parse(String responseBody) {
         while (cont.equals("y")) {
             System.out.println("-------------------------");
             System.out.println("What movie do you want to look up?");
-            Title = movieTitle.nextLine();
+            Title = scanner.nextLine();
             System.out.println("-------------------------");
             System.out.println("Enter a year of release? If not, hit the enter key.");
-            year = movieYear.nextLine();
+            year = scanner.nextLine();
             System.out.println("-------------------------");
             date = year;
             BufferedReader reader;
@@ -120,7 +117,7 @@ public static String parse(String responseBody) {
             }
             System.out.println("-------------------------");
             System.out.println("Do you want to continue? y/n ");
-            cont = _cont.nextLine();
+            cont = scanner.nextLine();
 
         }
         System.out.println("Goodbye!");
